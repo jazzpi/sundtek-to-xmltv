@@ -10,8 +10,9 @@ sudo git clone https://github.com/jazzpi/sundtek-to-xmltv.git /opt/sundtek-to-xm
 sudo chown -R user:user /opt/sundtek-to-xmltv
 ```
 
-Edit the `*** CONFIGURATION ***` section in [[sundtek-grab.py]] and the lines
-marked by `EDIT_THIS` in [[sundtek_xmltv.service]].
+Edit the `*** CONFIGURATION ***` section in [sundtek-grab.py](sundtek-grab.py)
+and the lines marked by `EDIT_THIS` in
+[sundtek_xmltv.service](sundtek_xmltv.service).
 
 ``` sh
 sudo cp /opt/sundtek-to-xmltv/sundtek_xmltv.service /etc/systemd/system/
