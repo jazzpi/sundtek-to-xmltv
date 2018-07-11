@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import datetime
@@ -9,7 +9,7 @@ import urllib.parse
 
 # *** CONFIGURATION ***
 # URL to servercmd.xhx
-SERVERCMD = 'http://192.168.169.6:22000/servercmd.xhx'
+SERVERCMD = 'http://localhost:22000/servercmd.xhx'
 # How many days do we fetch data for (including today)? Set to None to only
 # fetch data from `now`. Beware that a couple days can already take a couple
 # minutes, even with just 20 channels.

@@ -4,8 +4,10 @@ After=sundtek.service
 
 [Service]
 Type=simple
-User=user # EDIT THIS
-ExecStart=/opt/sundtek-to-xmltv/run-grabber.sh # EDIT THIS
+# EDIT THIS
+User=user
+# EDIT THIS
+ExecStart=/opt/sundtek-to-xmltv/run-grabber.sh
 Restart=on-failure
 
 [Install]
