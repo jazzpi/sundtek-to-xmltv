@@ -2,6 +2,7 @@
 
 import os
 import datetime
+import pytz
 import xml.etree.cElementTree as ET
 
 import requests
@@ -13,12 +14,17 @@ SERVERCMD = 'http://localhost:22000/servercmd.xhx'
 # How many days do we fetch data for (including today)? Set to None to only
 # fetch data from `now`. Beware that a couple days can already take a couple
 # minutes, even with just 20 channels.
-CALENDAR = 3
-# Where to save the XML file to
+CALENDAR = 0
+# Which Channel groups should be parsed?
+# If the array is empty, each channel whould be parsed.
+# e.g. CHANNEL_GROUPS = '[\"FreeTV\"]'
+CHANNEL_GROUPS = '[]'
+# relative save filepath
+RELATIVE_FILE_PATH = 'epg.xml'
+# *** CONFIGURATION END ***
+
 XML_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                        'epg.xml')
-
-
+                        RELATIVE_FILE_PATH)
 # Fetch overview
 data = []
 # Now
@@ -26,8 +32,7 @@ r = requests.post(SERVERCMD,
                   data={
                       'epgmode': 'now',
                       'epgfilter': 'now',
-                      'groups': '[]',
-                      'channels': '1,2,3,4,5'
+                      'groups': CHANNEL_GROUPS
                   })
 data.append(r.json())
 # Calendar
@@ -37,13 +42,13 @@ for offset in range(CALENDAR):
                       data={
                           'epgmode': 'calendar',
                           'date': str(date),
-                          'groups': '[]',
+                          'groups': CHANNEL_GROUPS,
                       })
     data.append(r.json())
 
 
 def format_time(timestamp):
-    dt = datetime.datetime.utcfromtimestamp(timestamp).astimezone(None)
+    dt = pytz.utc.localize(datetime.datetime.utcfromtimestamp(timestamp))
     return dt.strftime('%Y%m%d%H%M%S %Z')
 
 
@@ -53,6 +58,7 @@ def show_data(service_id, event_id, delsys):
                           'epgserviceid': service_id,
                           'epgeventid': event_id,
                           'delsys': delsys,
+                          'groups': CHANNEL_GROUPS,
                       })
     data = r.json()
     details = data[3]
