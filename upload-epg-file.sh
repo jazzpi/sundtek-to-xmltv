@@ -1,0 +1,1 @@
+curl -T epg.xml "ftp://USERNAME:PASSWORD@URL/"
