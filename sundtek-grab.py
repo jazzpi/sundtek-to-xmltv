@@ -9,7 +9,7 @@ import requests
 import urllib.parse
 
 # *** CONFIGURATION ***
-with open('config.json', 'r') as f:
+with open('/opt/sundtek-to-xmltv/config.json', 'r') as f:
     config = json.load(f)
 
 # URL to servercmd.xhx
