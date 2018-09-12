@@ -3,39 +3,53 @@
 import os
 import datetime
 import pytz
+import json
 import xml.etree.cElementTree as ET
-
 import requests
 import urllib.parse
 
 # *** CONFIGURATION ***
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
 # URL to servercmd.xhx
-SERVERCMD = 'http://SUNDTEK_SERVER:22000/servercmd.xhx'
+SERVERCMD = 'http://{0}:{1}/servercmd.xhx'.format(config['SERVER']['IP'],
+                                                  config['SERVER']['PORT'])
 # How many days to fetch (including today)? Set to 0 to only fetch data from `now`.
 # Beware that a couple days can already take a couple minutes, even with just 20 channels.
-DAYS = 1
+DAYS = config['FETCH']['DAYS']
 # Which Channel groups should be parsed?
 # If the array is empty, each channel whould be fetched.
 # e.g. CHANNEL_GROUPS = '[\"FreeTV\"]'
-CHANNEL_GROUPS = '[]'
+CHANNEL_GROUPS = config['FETCH']['CHANNEL_GROUPS']
 # Where to save the output (relative save filepath).
-RELATIVE_FILE_PATH = 'epg.xml'
+RELATIVE_FILE_PATH = config['RESULT']['FILE_PATH']
 # enable/disable DEBUG print
-DEBUG = False
+DEBUG = config['RESULT']['DEBUG_OUTPUT']
 # *** CONFIGURATION END ***
-
 
 def debug_print(text):
     if DEBUG:
         print(text)
 
+def get_readable_days(days):
+      if days == 0:
+          return 'now'
+      else:
+          return days + ' day\s'
 
-if len(CHANNEL_GROUPS) > 0:
-    debug_print("parse data for channel group " +
-                CHANNEL_GROUPS.replace('[\"', '').replace('\"]', ''))
-else:
-    debug_print("parse data for all channels")
+def get_readable_channel_group_names(channels_groups):
+    if len(channels_groups) > 0:
+        return "channel group\s {0}".format(
+                ', '.join(channels_groups))
+    else:
+        return "all channels"
 
+debug_print("grab data for {0} from {1} for {2} and save to {3}".format(
+    get_readable_channel_group_names(CHANNEL_GROUPS),
+    SERVERCMD,
+    get_readable_days(DAYS),
+    RELATIVE_FILE_PATH))
 
 # Fetch overview
 def fetch_overviews_for_days(days):

@@ -1,0 +1,14 @@
+{
+  "SERVER": {
+    "IP": "localhost",
+    "PORT": 22000
+  },
+  "FETCH": {
+    "DAYS": 0,
+    "CHANNEL_GROUPS": []
+  },
+  "RESULT": {
+    "FILE_PATH": "epg.xml",
+    "DEBUG_OUTPUT": false
+  }
+}
