@@ -140,8 +140,6 @@ def parse_channels_shows(overviews):
                 event_id = show[2]
                 if event_id not in shows:
                     shows[event_id] = get_show_data(service_id, event_id, delsys)
-            break
-        break
 
 
 # Generate XML content
