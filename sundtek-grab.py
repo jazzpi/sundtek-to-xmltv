@@ -5,6 +5,7 @@ import requests
 import pytz
 
 import os
+import sys
 import datetime
 import ftplib
 import urllib.parse
@@ -12,7 +13,7 @@ import json
 import xml.etree.cElementTree as ET
 
 # *** CONFIGURATION ***
-with open('config.json', 'r') as f:
+with open('{0}/config.json'.format(os.path.dirname(os.path.realpath(sys.argv[0]))), 'r') as f:
     config = json.load(f)
 
 # URL to servercmd.xhx
