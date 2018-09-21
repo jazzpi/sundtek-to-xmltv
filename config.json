@@ -1,14 +1,15 @@
 {
-  "SERVER": {
-    "IP": "localhost",
-    "PORT": 22000
-  },
   "FETCH": {
+    "SERVER": "localhost:22000",
     "DAYS": 0,
-    "CHANNEL_GROUPS": []
-  },
-  "RESULT": {
-    "FILE_PATH": "epg.xml",
+    "CHANNEL_GROUPS": [],
+    "OUTPUT_FILE_PATH": "epg.xml",
     "DEBUG_OUTPUT": false
+  },
+  "FTP_UPLOAD": {
+    "SERVER": "",
+    "FILE_NAME": "epg.xml",
+    "USERNAME": "",
+    "PASSWORD": ""
   }
 }

@@ -1,7 +1,7 @@
 # Sundtek XMLTV Grabber
 
 This script grabs EPG data from a Sundtek media server, converts it to XMLTV
-data and upload (optional) the XMLTV data file to a ftp server.
+data and upload the XMLTV data file to a ftp server (optional).
 The XMLTV data file can be used e.g. by the Kodi's Simple IPTV addon.
 
 ## install
@@ -12,12 +12,11 @@ sudo chown -R user:user /opt/sundtek-to-xmltv
 ```
 
 ## configure
-Edit the `*** CONFIGURATION ***` section in [sundtek-grab.py](sundtek-grab.py)
-and replace the `USERNAME` in [sundtek_xmltv.service](sundtek_xmltv.service).
+Edit [config.json](config.json) and replace the content of the fields.
+With `"CHANNEL_GROUPS"` you can restrict the fetched groups (e.g. `"CHANNEL_GROUPS": ["FreeTV"]`).
 
 ### configure Upload (optional)
-Remove the `#` in [run-grabber.sh](run-grabber.sh) before `"$GRABBER_DIR/upload-epg-file.sh"` 
-and replace `USERNAME`, `PASSWORD` and `URL` in [upload-epg-file.sh](upload-epg-file.sh).
+If the `SERVER` under `FTP_UPLOAD` is set, the upload will be executed after fetching data.
 
 ### install Service
 ``` sh

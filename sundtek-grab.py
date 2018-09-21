@@ -1,31 +1,38 @@
 #!/usr/bin/env python3
 
+# need to be installed
+import requests
+import pytz
+
 import os
 import datetime
-import pytz
+import ftplib
+import urllib.parse
 import json
 import xml.etree.cElementTree as ET
-import requests
-import urllib.parse
 
 # *** CONFIGURATION ***
-with open('/opt/sundtek-to-xmltv/config.json', 'r') as f:
+with open('config.json', 'r') as f:
     config = json.load(f)
 
 # URL to servercmd.xhx
-SERVERCMD = 'http://{0}:{1}/servercmd.xhx'.format(config['SERVER']['IP'],
-                                                  config['SERVER']['PORT'])
+SERVERCMD = 'http://{0}/servercmd.xhx'.format(config['FETCH']['SERVER'])
 # How many days to fetch (including today)? Set to 0 to only fetch data from `now`.
 # Beware that a couple days can already take a couple minutes, even with just 20 channels.
 DAYS = config['FETCH']['DAYS']
 # Which Channel groups should be parsed?
 # If the array is empty, each channel whould be fetched.
-# e.g. CHANNEL_GROUPS = '[\"FreeTV\"]'
+# e.g. CHANNEL_GROUPS = ["FreeTV"]
 CHANNEL_GROUPS = config['FETCH']['CHANNEL_GROUPS']
 # Where to save the output (relative save filepath).
-RELATIVE_FILE_PATH = config['RESULT']['FILE_PATH']
+RELATIVE_FILE_PATH = config['FETCH']['OUTPUT_FILE_PATH']
 # enable/disable DEBUG print
-DEBUG = config['RESULT']['DEBUG_OUTPUT']
+DEBUG = config['FETCH']['DEBUG_OUTPUT']
+# FTP upload
+FTP_SERVER = config['FTP_UPLOAD']['SERVER']
+FTP_FILE_NAME = config['FTP_UPLOAD']['FILE_NAME']
+FTP_USERNAME = config['FTP_UPLOAD']['USERNAME']
+FTP_PASSWORD = config['FTP_UPLOAD']['PASSWORD']
 # *** CONFIGURATION END ***
 
 def debug_print(text):
@@ -154,6 +161,17 @@ def save_xml_file(path, xml_tree):
     <!DOCTYPE tv SYSTEM "xmltv.dtd">'''.encode('utf-8'))
         xml_tree.write(fh, 'utf-8')
 
+# FTP Upload
+def upload_result(file_path, file_name, server, username, password):
+    if len(server) > 0:
+        try:
+            ftp_connection = ftplib.FTP(server, username, password)
+            debug_print('FTP connection established! Welcome msg is \"' + ftp_connection.getwelcome() + '\"')
+            fh = open(file_path, 'rb')
+            ftp_connection.storbinary('STOR {0}'.format(file_name), fh)
+            fh.close()
+        except ftplib.all_errors as e:
+            debug_print('Unable to connect to FTP Server!,%s'%e)
 
 # main execution
 overviews = fetch_overviews_for_days(DAYS)
@@ -163,3 +181,4 @@ parse_channels_shows(overviews)
 tree = generate_xml_content(channels, shows)
 save_xml_file(os.path.join(os.path.dirname(os.path.realpath(__file__)),
               RELATIVE_FILE_PATH), tree)
+upload_result(RELATIVE_FILE_PATH, FTP_FILE_NAME, FTP_SERVER, FTP_USERNAME, FTP_PASSWORD)
