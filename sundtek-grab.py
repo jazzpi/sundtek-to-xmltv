@@ -12,8 +12,10 @@ import urllib.parse
 import json
 import xml.etree.cElementTree as ET
 
+
 # *** CONFIGURATION ***
-with open('{0}/config.json'.format(os.path.dirname(os.path.realpath(sys.argv[0]))), 'r') as f:
+SCRIPT_DIR = os.path.dirname(os.path.realpath(sys.argv[0]))
+with open('{0}/config.json'.format(SCRIPT_DIR), 'r') as f:
     config = json.load(f)
 
 # URL to servercmd.xhx
@@ -138,6 +140,8 @@ def parse_channels_shows(overviews):
                 event_id = show[2]
                 if event_id not in shows:
                     shows[event_id] = get_show_data(service_id, event_id, delsys)
+            break
+        break
 
 
 # Generate XML content
@@ -168,9 +172,10 @@ def upload_result(file_path, file_name, server, username, password):
         try:
             ftp_connection = ftplib.FTP(server, username, password)
             debug_print('FTP connection established! Welcome msg is \"' + ftp_connection.getwelcome() + '\"')
-            fh = open(file_path, 'rb')
+            fh = open('{0}/{1}'.format(SCRIPT_DIR, file_path), 'rb')
             ftp_connection.storbinary('STOR {0}'.format(file_name), fh)
             fh.close()
+            debug_print('Upload done!')
         except ftplib.all_errors as e:
             debug_print('Unable to connect to FTP Server!,%s'%e)
 
