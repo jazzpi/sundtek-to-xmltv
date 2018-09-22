@@ -8,8 +8,8 @@
   },
   "FTP_UPLOAD": {
   	"ENABLED": false,
-    "SERVER": "",
     "FILE_NAME": "epg.xml",
+    "SERVER": "",
     "USERNAME": "",
     "PASSWORD": ""
   }
