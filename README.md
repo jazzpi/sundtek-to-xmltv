@@ -10,6 +10,12 @@ sudo git clone https://github.com/jazzpi/sundtek-to-xmltv.git /opt/sundtek-to-xm
 sudo chown -R user:user /opt/sundtek-to-xmltv
 ```
 
+### install python modules
+``` sh
+pip3 install requests
+pip3 install pytz
+```
+
 ### install as Service
 ``` sh
 sudo cp /opt/sundtek-to-xmltv/sundtek_xmltv.service /etc/systemd/system/
