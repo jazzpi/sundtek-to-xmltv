@@ -32,6 +32,7 @@ RELATIVE_FILE_PATH = config['FETCH']['OUTPUT_FILE_PATH']
 # enable/disable DEBUG print
 DEBUG = config['FETCH']['DEBUG_OUTPUT']
 # FTP upload
+FTP_UPLOAD_ENABLED = config['FTP_UPLOAD']['ENABLED']
 FTP_SERVER = config['FTP_UPLOAD']['SERVER']
 FTP_FILE_NAME = config['FTP_UPLOAD']['FILE_NAME']
 FTP_USERNAME = config['FTP_UPLOAD']['USERNAME']
@@ -185,4 +186,6 @@ parse_channels_shows(overviews)
 tree = generate_xml_content(channels, shows)
 save_xml_file(os.path.join(os.path.dirname(os.path.realpath(__file__)),
               RELATIVE_FILE_PATH), tree)
-upload_result(RELATIVE_FILE_PATH, FTP_FILE_NAME, FTP_SERVER, FTP_USERNAME, FTP_PASSWORD)
+
+if FTP_UPLOAD_ENABLED:
+  upload_result(RELATIVE_FILE_PATH, FTP_FILE_NAME, FTP_SERVER, FTP_USERNAME, FTP_PASSWORD)

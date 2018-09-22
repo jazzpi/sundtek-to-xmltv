@@ -7,6 +7,7 @@
     "DEBUG_OUTPUT": false
   },
   "FTP_UPLOAD": {
+  	"ENABLED": false,
     "SERVER": "",
     "FILE_NAME": "epg.xml",
     "USERNAME": "",
