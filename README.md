@@ -19,7 +19,8 @@ sudo systemctl enable --now sundtek_xmltv.service
 ```
 
 ## configure
-Edit [config.json](config.json) and replace the content of the [fields](#configuration-field-list).
+Edit [config.json](config.json) and replace the content of the [fields](#configuration-field-list).  
+Replace `USERNAME` in [sundtek_xmltv.service](sundtek_xmltv.service) with the username of the local user.
 
 ### configure FTP Upload (optional)
 If `SERVER` is not empty and `ENABLED` is set to true, the upload will be executed after fetching data.
