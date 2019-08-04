@@ -48,7 +48,7 @@ def get_readable_days(days):
       if days == 0:
           return 'now'
       else:
-          return days + ' day\s'
+          return str(days) + ' day\s'
 
 def get_readable_channel_group_names(channels_groups):
     if len(channels_groups) > 0:
@@ -98,6 +98,7 @@ def format_time(timestamp):
 
 # Get show details
 def get_show_data(service_id, event_id, delsys):
+    debug_print("fetch show " + str(service_id) + " - " + str(event_id) + " - " + str(delsys))
     r = requests.post(SERVERCMD,
                       data={
                           'epgserviceid': service_id,
@@ -105,20 +106,27 @@ def get_show_data(service_id, event_id, delsys):
                           'delsys': delsys,
                           'groups': CHANNEL_GROUPS,
                       })
-    data = r.json()
-    details = data[3]
-    start = format_time(details[0])
-    stop = format_time(details[0] + details[1])
-    event_id = details[2]
-    title = urllib.parse.unquote(details[3])
-    desc = urllib.parse.unquote(details[5])
-    return {
-        'service_id': service_id,
-        'start': start,
-        'stop': stop,
-        'title': title,
-        'desc': desc,
-    }
+
+    try:
+        data = r.json()
+        details = data[3]
+        start = format_time(details[0])
+        stop = format_time(details[0] + details[1])
+        event_id = details[2]
+        title = urllib.parse.unquote(details[3])
+        desc = urllib.parse.unquote(details[5])
+
+        result = {
+            'service_id': service_id,
+            'start': start,
+            'stop': stop,
+            'title': title,
+            'desc': desc,
+        }
+    except json.decoder.JSONDecodeError as e:
+        debug_print('Unable to get show details!,%s'%e)
+        result = None
+    return result
 
 
 # Parse data
@@ -131,19 +139,22 @@ def parse_channels_shows(overviews):
         for channel_index, channel in enumerate(overview):
             debug_print("parse channel " + str(channel_index) + " - " + channel[1])
             if channel[1].startswith(DEBUG_CHANNEL_PREFIX):
-              service_id = channel[2]
-              delsys = channel[3]
-              if service_id not in channels:
-                  name = channel[1]
-                  channels[service_id] = {
+                service_id = channel[2]
+                delsys = channel[3]
+                if service_id not in channels:
+                    name = channel[1]
+                    channels[service_id] = {
                       'name': name,
                       'delsys': delsys,
-                  }
-              for show_index, show in enumerate(channel[4:]):
-                  debug_print("parse show " + str(show_index) + " of channel " + channel[1])
-                  event_id = show[2]
-                  if event_id not in shows:
-                      shows[event_id] = get_show_data(service_id, event_id, delsys)
+                    }
+
+                for show_index, show in enumerate(channel[4:]):
+                    debug_print("parse show " + str(show_index) + " of channel " + channel[1])
+                    event_id = show[2]
+                    if event_id not in shows:
+                        show_data = get_show_data(service_id, event_id, delsys)
+                        if show_data:
+                            shows[event_id] = show_data
 
 
 # Generate XML content

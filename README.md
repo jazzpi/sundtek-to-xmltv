@@ -46,7 +46,7 @@ If `SERVER` is not empty and `ENABLED` is set to true, the upload will be execut
 	  Where to save the output (relative save filepath e.g. `../../home/shares/tv/epg.xml`)?
 	- `DEBUG`  
 	  enable/disable DEBUG mode
-	- `DEBUG_CHANNEL_PREFIX`
+	- `DEBUG_CHANNEL_PREFIX`  
 	  parse only channels with the given prefix
 - `FTP_UPLOAD`
 	- `ENABLED`  
