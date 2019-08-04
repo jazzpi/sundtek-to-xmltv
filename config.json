@@ -1,0 +1,17 @@
+{
+  "FETCH": {
+    "SERVER": "localhost:22000",
+    "DAYS": 0,
+    "CHANNEL_GROUPS": [],
+    "OUTPUT_FILE_PATH": "epg.xml",
+    "DEBUG": false,
+    "DEBUG_CHANNEL_PREFIX": null
+  },
+  "FTP_UPLOAD": {
+    "ENABLED": false,
+    "FILE_NAME": "epg.xml",
+    "SERVER": "",
+    "USERNAME": "",
+    "PASSWORD": ""
+  }
+}
