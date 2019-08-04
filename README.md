@@ -44,8 +44,10 @@ If `SERVER` is not empty and `ENABLED` is set to true, the upload will be execut
 	  If the array is empty, each channel whould be fetched.
 	- `OUTPUT_FILE_PATH`  
 	  Where to save the output (relative save filepath e.g. `../../home/shares/tv/epg.xml`)?
-	- `DEBUG_OUTPUT`  
-	  enable/disable DEBUG print
+	- `DEBUG`  
+	  enable/disable DEBUG mode
+	- `DEBUG_CHANNEL_PREFIX`
+	  parse only channels with the given prefix
 - `FTP_UPLOAD`
 	- `ENABLED`  
 	  enable/disable upload

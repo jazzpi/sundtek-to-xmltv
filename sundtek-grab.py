@@ -30,7 +30,8 @@ CHANNEL_GROUPS = config['FETCH']['CHANNEL_GROUPS']
 # Where to save the output (relative save filepath).
 RELATIVE_FILE_PATH = config['FETCH']['OUTPUT_FILE_PATH']
 # enable/disable DEBUG print
-DEBUG = config['FETCH']['DEBUG_OUTPUT']
+DEBUG = config['FETCH']['DEBUG']
+DEBUG_CHANNEL_PREFIX = str(config['FETCH']['DEBUG_CHANNEL_PREFIX'] or '')
 # FTP upload
 FTP_UPLOAD_ENABLED = config['FTP_UPLOAD']['ENABLED']
 FTP_FILE_NAME = config['FTP_UPLOAD']['FILE_NAME']
@@ -124,23 +125,25 @@ def get_show_data(service_id, event_id, delsys):
 def parse_channels_shows(overviews):
     global channels
     global shows
+
     for overview_index, overview in enumerate(overviews):
         debug_print("parse overview " + str(overview_index))
         for channel_index, channel in enumerate(overview):
             debug_print("parse channel " + str(channel_index) + " - " + channel[1])
-            service_id = channel[2]
-            delsys = channel[3]
-            if service_id not in channels:
-                name = channel[1]
-                channels[service_id] = {
-                    'name': name,
-                    'delsys': delsys,
-                }
-            for show_index, show in enumerate(channel[4:]):
-                debug_print("parse show " + str(show_index) + " of channel " + channel[1])
-                event_id = show[2]
-                if event_id not in shows:
-                    shows[event_id] = get_show_data(service_id, event_id, delsys)
+            if channel[1].startswith(DEBUG_CHANNEL_PREFIX):
+              service_id = channel[2]
+              delsys = channel[3]
+              if service_id not in channels:
+                  name = channel[1]
+                  channels[service_id] = {
+                      'name': name,
+                      'delsys': delsys,
+                  }
+              for show_index, show in enumerate(channel[4:]):
+                  debug_print("parse show " + str(show_index) + " of channel " + channel[1])
+                  event_id = show[2]
+                  if event_id not in shows:
+                      shows[event_id] = get_show_data(service_id, event_id, delsys)
 
 
 # Generate XML content
